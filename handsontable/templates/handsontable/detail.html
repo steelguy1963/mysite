@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    {% load static %}
+    <link href="{% static 'css/handsontable.full.min.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="card-block">
+        <p class="deck">
+            <div id="grid"></div>
+
+            <button type="button" id="add">Add</button>
+            <button type="button" id="save">Save</button>
+            <a href="{% url 'handsontable:record-index' %}">List</a>
+
+            <script src="{% static 'js/libs/handsontable.full.min.js' %}"></script>
+            <script src="{% static 'js/libs/js.cookie-2.1.3.min.js' %}"></script>
+
+            <script src="{% static 'js/libs/myscript.js' %}"></script>
+        </p>
+    </div>
+</body>
+</html>

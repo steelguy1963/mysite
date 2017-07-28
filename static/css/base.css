@@ -1,0 +1,36 @@
+body {
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+    font-size: 12px;
+}
+
+div#content {
+    position: absolute;
+    top: 70px;
+    left: 50px;
+    right: 50px;
+}
+
+a:link, a:visited {
+    color: #369;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    line-height: 18px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    padding: 5px 15px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+table.change-list, table.change-list th, table.change-list td {
+    border: 1px solid #ccc;
+}
