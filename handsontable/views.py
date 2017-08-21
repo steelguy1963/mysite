@@ -24,10 +24,11 @@ class HandsonTableView(View):
             content_type='application/json'
         )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):   
         body_unicode = request.body.decode('utf-8')
-        body = json.load(body_unicode)
-        header = self.update_header(self.kwagrs.get('pk'))
+        print(body_unicode)
+        body = json.loads(body_unicode) # json.load : file pointer를 인자로 받아서 파일을 읽는 함수 json.loads로 쓰셔야합니다.
+        header = self.update_header(self.kwargs.get('pk')) # kwargs 오타
         Detail.objects.filter(header=header).delete()
 
         for b in body:
