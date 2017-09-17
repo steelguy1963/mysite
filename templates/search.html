@@ -1,0 +1,113 @@
+<html>
+    <head>
+        <title>자동완성 Component</title>
+        <style>
+            .search-area {
+                position: relative;
+                width:300px;
+                height:36px;
+                border:3px solid #df5a5f;
+                display:flex;
+            }
+            .search-area input,
+            .search-area button {
+                border:none;
+                outline:none;
+            }
+            .search-area input {
+                flex:1;
+                padding:0 12px;
+                font-size:16px;
+            }
+            .search-area button {
+                cursor:pointer;
+                background-color:#df5a5f;
+                color:#fff;
+            }
+            .dropdown {
+                position: absolute;
+                top:44px;
+                background-color:#fff;
+                border:1px solid #d0d0d0;
+                list-style :none;
+                margin:0;
+                padding:6px 12px;
+                display:none;
+                height:400px;
+                overflow-y:auto;
+            }
+            .dropdown li {
+                padding:6px 12px;
+                cursor:pointer;
+                border-bottom:1px solid #d0d0d0
+            }
+            .dropdown li.active,
+            .dropdown li:hover {
+                background-color:#efdadf;
+            }
+            .dropdown li:last-child {
+                border-bottom:none;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>자동완성 테스트</h2>
+        <div class="search-area">
+            <input type="text" id="search-input" />
+            <button type="button">검색</button>
+            <ul class="dropdown" id="search-result">
+            </ul>
+        </div>
+    </body>
+    <script>
+        
+        var resultList = '';
+        var current = -1;
+        var listElem = document.getElementById("search-result");
+        // 입력 input element에서 키가 올라올 때마다 이벤트를 트리거합니다.
+        document.getElementById('search-input').addEventListener('keyup', function(evt) {
+            var character = String.fromCharCode(evt.keyCode);
+            if (/[a-zA-Z0-9\b ]/.test(character)) {
+                // 만약에 마지막으로 입력된 키의 값이 알파벳, 공백문자, 숫자, 백스페이스 중의 하나라면 AJAX를 이용해 서버로부터 데이터를 받아옵니다.
+                // 서버에 input에 입력된 값을 query parameter로 전달합니다.
+                // CORS 규칙때문에 대부분 외부 API를 연동할 때에는 자체 백엔드에 AJAX를 호출하면 해당 백엔드 endpoint에서 외부 API를 호출하는 식으로 구성합니다.
+                fetch('/query/'+evt.target.value,{method:'GET'}).then(res => {
+                    return res.json();
+                    // 결과값을 json으로 받아옵니다.
+                }).then(data => {
+                    resultList = '';
+                    for(var i = 0; i < data.length; i++) {
+                        resultList = resultList + '<li>'+ data[i].title +'</li>';
+                        // 받아온 json을 이용해 html string을 만듭니다.
+                    }
+                    listElem.innerHTML = resultList;
+                    //  만든 html string을 ul element 안에 넣습니다.
+
+                    current = -1;
+                    // list의 모든 element의 선택을 해제합니다.
+
+                    if(resultList.length > 0)
+                        listElem.style.display = "block";
+                    else
+                        listElem.style.display = "none";
+                })
+            } else if(evt.keyCode == '38') { // up 키가 눌렸을 때 
+                if(current > 0) {
+                    listElem.childNodes[current].className = "";
+                    listElem.childNodes[--current].className = "active";
+                    //목록에서 하나씩 위로 가며 active 클래스를 추가합니다.
+                    document.getElementById('search-input').value = listElem.childNodes[current].innerHTML;
+                    // active된 목록의 내용을 input에 채웁니다.
+                }
+            } else if (evt.keyCode == '40') { // down 키가 눌렸을 때 
+                if(current < listElem.childNodes.length - 1) {
+                    listElem.childNodes[(current < 0)?0:current].className = "";
+                    listElem.childNodes[++current].className = "active";
+                    //목록에서 하나씩 위로 가며 active 클래스를 추가합니다.
+                    document.getElementById('search-input').value = listElem.childNodes[current].innerHTML;
+                    // active된 목록의 내용을 input에 채웁니다.
+                }
+            }
+        })
+    </script>
+</html>

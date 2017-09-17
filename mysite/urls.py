@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-
+from . import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^search/', views.search),
+    url(r'^query/(?P<query>[\w\s]*)', views.query),
     url(r'^handsontable/', include('handsontable.urls', namespace='handsontable')),
 ]
